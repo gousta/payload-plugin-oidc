@@ -56,10 +56,6 @@ export const oidcPlugin =
       }),
     };
 
-    if (!options.clientID) {
-      throw new Error("oidcPlugin requires options.clientID");
-    }
-
     return CLIENTSIDE
       ? oidcPluginClient(config, options)
       : oidcPluginServer(config, options);
@@ -89,6 +85,10 @@ function oidcPluginServer(
   incoming: Config,
   options: oidcPluginOptions
 ): Config {
+  if (!options.clientID) {
+    throw new Error("oidcPlugin requires options.clientID");
+  }
+
   const userCollectionSlug =
     (options.userCollection?.slug as "users") || "users";
 
