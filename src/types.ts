@@ -1,37 +1,37 @@
-import type { StrategyOptions } from 'passport-oauth2'
-import type { ComponentType } from 'react'
+import type { StrategyOptions } from "passport-oauth2";
+import type { ComponentType } from "react";
 
 export interface oidcPluginOptions extends StrategyOptions {
   /** How to connect to the Mongo database? */
-  mongoUrl: string
+  mongoUrl: string;
 
   /** Map an authentication result to a user */
   userinfo: (accessToken: string) => Promise<{
     /** Unique identifier for the linked account */
-    sub: string
+    sub: string;
     /** Unique identifier for the linked account */
-    email?: string
+    email?: string;
     /** A password will be generated for new users */
-    password?: string
+    password?: string;
     /** Example of a custom field */
-    name?: string
-  }>
+    name?: string;
+  }>;
 
   /** Which path to mount in express, defaults to the path in callbackURL */
-  callbackPath?: string
+  callbackPath?: string;
 
   components?: {
-    Button?: ComponentType<any>
-  }
+    Button?: ComponentType<any>;
+  };
 
   userCollection?: {
     /** Defaults to "users" */
-    slug?: string
-  }
-  
+    slug?: string;
+  };
+
   /** If the collection does not have a field with name "sub", it will be created */
   subField?: {
     /** Defaults to "sub" */
-    name?: string
-  }
+    name?: string;
+  };
 }

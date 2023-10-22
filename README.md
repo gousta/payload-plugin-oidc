@@ -28,7 +28,7 @@ yarn add payload-plugin-oidc
 
 ```js
 // payload.config.ts
-import { oidcPlugin } from 'payload-plugin-oidc';
+import { oidcPlugin } from "payload-plugin-oidc";
 
 export default buildConfig({
   serverURL: process.env.SERVER_URL,
@@ -37,17 +37,17 @@ export default buildConfig({
     oidcPlugin({
       clientID: process.env.OIDC_CLIENT_ID,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
-      authorizationURL: process.env.OIDC_URI + '/oidc/authorize',
-      tokenURL: process.env.OIDC_URI + '/oidc/token',
-      callbackURL: process.env. + '/oidc/callback',
-      scope: 'basic',
+      authorizationURL: `${process.env.OIDC_URI}/oidc/auth`,
+      tokenURL: `${process.env.OIDC_URI}/oidc/token`,
+      callbackPath: `/oidc/callback`,
+      scope: "openid offline_access profile email custom_data",
+      mongoUrl: process.env.MONGODB_URI,
       async userinfo(accessToken) {
-        const { data: user } = await axios.get(`${process.env.OIDC_URI}/oidc/me`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        
+        const { data: user } = await axios.get(
+          `${process.env.OIDC_URI}/oidc/me`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+
         return {
           sub: user.sub,
           name: user.name,
@@ -61,7 +61,7 @@ export default buildConfig({
       },
     }),
   ],
-})
+});
 ```
 
 ## Contributing
