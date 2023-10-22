@@ -215,6 +215,7 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
     profile: {},
     cb: VerifyCallback
   ) {
+    const allowRegistration = options.allowRegistration || true;
     const sub = options.subField?.name || "sub";
     let info: {
       sub: string;
@@ -242,19 +243,24 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
         user.collection = userCollectionSlug;
         user._strategy = "oauth2";
       } else {
-        // Register new user
-        user = await payload.create({
-          collection: userCollectionSlug,
-          data: {
-            ...info,
-            // Stuff breaks when password is missing
-            password: info.password || str62(20),
-          },
-          showHiddenFields: true,
-        });
-        log("signin.user", user);
-        user.collection = userCollectionSlug;
-        user._strategy = "oauth2";
+        if (options.allowRegistration) {
+          // Register new user
+          user = await payload.create({
+            collection: userCollectionSlug,
+            data: {
+              ...info,
+              // Stuff breaks when password is missing
+              password: info.password || str62(20),
+            },
+            showHiddenFields: true,
+          });
+          log("signin.user", user);
+          user.collection = userCollectionSlug;
+          user._strategy = "oauth2";
+        } else {
+          log("signin.fail", "account does not exist");
+          cb(new Error("Account does not exist"));
+        }
       }
 
       cb(null, user);

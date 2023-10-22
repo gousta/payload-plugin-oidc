@@ -5,6 +5,9 @@ export interface oidcPluginOptions extends StrategyOptions {
   /** How to connect to the Mongo database? */
   mongoUrl: string;
 
+  /** Register user after successful authentication (when user not found) - Defaults to true */
+  allowRegistration: boolean;
+
   /** Map an authentication result to a user */
   userinfo: (accessToken: string) => Promise<{
     /** Unique identifier for the linked account */

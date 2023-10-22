@@ -3,8 +3,8 @@
 <a href="LICENSE">
   <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg" alt="Software License" />
 </a>
-<a href="https://github.com/thgh/payload-plugin-oidc/issues">
-  <img src="https://img.shields.io/github/issues/thgh/payload-plugin-oidc.svg" alt="Issues" />
+<a href="https://github.com/gousta/payload-plugin-oidc/issues">
+  <img src="https://img.shields.io/github/issues/gousta/payload-plugin-oidc.svg" alt="Issues" />
 </a>
 <a href="https://npmjs.org/package/payload-plugin-oidc">
   <img src="https://img.shields.io/npm/v/payload-plugin-oidc.svg?style=flat-squar" alt="NPM" />
