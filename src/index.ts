@@ -218,7 +218,7 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
     profile: {},
     cb: VerifyCallback
   ) {
-    const allowRegistration = options.allowRegistration || true;
+    const allowRegistration = options.allowRegistration || false;
     const searchKey = options.subField?.name || "sub";
     let info: {
       sub: string;
