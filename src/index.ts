@@ -244,12 +244,12 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
 
       log(
         "signin.debug",
-        `users lookup with email returned ${users.docs.length} results`
+        `users lookup with ${searchKey} returned ${users.docs.length} results`
       );
 
       if (users.docs && users.docs.length) {
         user = users.docs[0];
-        log("signin.debug", `selecting user with email ${user.email}`);
+        log("signin.debug", `selecting user with ${searchKey} ${user.email}`);
 
         await payload.update({
           collection: userCollectionSlug,
@@ -259,7 +259,7 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
             role: info.role,
           },
         });
-        log("signin.debug", `updated user with email ${user.email}`);
+        log("signin.debug", `updated user with ${searchKey} ${user.email}`);
 
         users = await payload.find({
           collection: userCollectionSlug,
