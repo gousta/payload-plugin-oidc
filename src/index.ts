@@ -242,6 +242,7 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
         user = users.docs[0];
         user.collection = userCollectionSlug;
         user._strategy = "oauth2";
+        cb(null, user);
       } else {
         if (options.allowRegistration) {
           // Register new user
@@ -257,13 +258,12 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
           log("signin.user", user);
           user.collection = userCollectionSlug;
           user._strategy = "oauth2";
+          cb(null, user);
         } else {
           log("signin.fail", "account does not exist");
           cb(new Error("Account does not exist"));
         }
       }
-
-      cb(null, user);
     } catch (error: any) {
       log("signin.fail", error.message, error.trace);
       cb(error);
