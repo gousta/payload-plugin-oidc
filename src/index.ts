@@ -23,7 +23,10 @@ import { webpackOverride } from "./overrides";
 
 export { SignInButton, oidcPluginOptions };
 
-interface User {}
+interface User {
+  id: string;
+  email: string;
+}
 
 const log = debug("plugin:oidc");
 
@@ -216,12 +219,13 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
     cb: VerifyCallback
   ) {
     const allowRegistration = options.allowRegistration || true;
-    const sub = options.subField?.name || "sub";
+    const searchKey = options.subField?.name || "sub";
     let info: {
       sub: string;
+      name?: string;
       email?: string;
       password?: string;
-      name?: string;
+      role?: string;
     };
     let user: User & { collection?: any; _strategy?: any };
     let users: PaginatedDocs<User>;
@@ -234,17 +238,42 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
       // Match existing user
       users = await payload.find({
         collection: userCollectionSlug,
-        where: { [sub]: { equals: info[sub as "sub"] } },
+        where: { [searchKey]: { equals: info[searchKey as "sub"] } },
         showHiddenFields: true,
       });
 
+      log(
+        "signin.debug",
+        `users lookup with email returned ${users.docs.length} results`
+      );
+
       if (users.docs && users.docs.length) {
+        user = users.docs[0];
+        log("signin.debug", `selecting user with email ${user.email}`);
+
+        await payload.update({
+          collection: userCollectionSlug,
+          where: { [searchKey]: { equals: info[searchKey as "sub"] } },
+          data: {
+            sub: info.sub,
+            role: info.role,
+          },
+        });
+        log("signin.debug", `updated user with email ${user.email}`);
+
+        users = await payload.find({
+          collection: userCollectionSlug,
+          where: { [searchKey]: { equals: info[searchKey as "sub"] } },
+          showHiddenFields: true,
+        });
         user = users.docs[0];
         user.collection = userCollectionSlug;
         user._strategy = "oauth2";
+        log("signin.user", user);
         cb(null, user);
       } else {
-        if (options.allowRegistration) {
+        if (allowRegistration) {
+          log("signin.debug", "allow registrations, so registering");
           // Register new user
           user = await payload.create({
             collection: userCollectionSlug,
@@ -255,11 +284,12 @@ const verification = (options: oidcPluginOptions, userCollectionSlug: string) =>
             },
             showHiddenFields: true,
           });
-          log("signin.user", user);
           user.collection = userCollectionSlug;
           user._strategy = "oauth2";
+          log("signin.user", user);
           cb(null, user);
         } else {
+          log("signin.debug", "does not allow registrations, so failing");
           log("signin.fail", "account does not exist");
           cb(new Error("Account does not exist"));
         }
