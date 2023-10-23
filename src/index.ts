@@ -1,10 +1,10 @@
 import { str62 } from "@bothrs/util/random";
 import MongoStore from "connect-mongo";
+import debug from "debug";
 import session from "express-session";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import OAuth2Strategy, { VerifyCallback } from "passport-oauth2";
-import debug from "debug";
 import payload from "payload";
 import { Config } from "payload/config";
 import {
@@ -12,20 +12,20 @@ import {
   fieldAffectsData,
   fieldHasSubFields,
 } from "payload/dist/fields/config/types";
-import { PaginatedDocs } from "payload/dist/mongoose/types";
 import getCookieExpiration from "payload/dist/utilities/getCookieExpiration";
 import { TextField } from "payload/types";
 
+import { PaginatedDocs } from "payload/dist/database/types";
 import SignInButton from "./components/SignInButton";
-import type { oidcPluginOptions } from "./types";
 import { SIGN_IN_PATH } from "./config";
 import { webpackOverride } from "./overrides";
+import type { oidcPluginOptions } from "./types";
 
 export { SignInButton, oidcPluginOptions };
 
 interface User {
-  id: string;
-  email: string;
+  id: string | number;
+  email?: string;
 }
 
 const log = debug("plugin:oidc");
