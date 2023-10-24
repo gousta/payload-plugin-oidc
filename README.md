@@ -39,6 +39,7 @@ export default buildConfig({
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       authorizationURL: `${process.env.OIDC_URI}/oidc/auth`,
       tokenURL: `${process.env.OIDC_URI}/oidc/token`,
+      initPath: `/oidc/signin`,
       callbackPath: `/oidc/callback`,
       scope: "openid offline_access profile email custom_data",
       mongoUrl: process.env.MONGODB_URI,

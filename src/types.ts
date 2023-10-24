@@ -20,7 +20,10 @@ export interface oidcPluginOptions extends StrategyOptions {
     name?: string;
   }>;
 
-  /** Which path to mount in express, defaults to the path in callbackURL */
+  /** Which path to mount for the initialization endpoint in express */
+  initPath: string;
+
+  /** Which path to mount for the callback endpoint in express, defaults to the path in callbackURL */
   callbackPath?: string;
 
   components?: {

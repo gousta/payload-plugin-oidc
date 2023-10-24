@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "passport": "^0.6",
-    "payload": "^1",
+    "payload": "^2",
     "react": "^18"
   },
   "author": "Stratos Giouldasis <giouldasis.stratos@gmail.com>",

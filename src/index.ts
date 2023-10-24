@@ -17,7 +17,6 @@ import { TextField } from "payload/types";
 
 import { PaginatedDocs } from "payload/dist/database/types";
 import SignInButton from "./components/SignInButton";
-import { SIGN_IN_PATH } from "./config";
 import { webpackOverride } from "./overrides";
 import type { oidcPluginOptions } from "./types";
 
@@ -120,7 +119,7 @@ function oidcPluginServer(
     },
     endpoints: (incoming.endpoints || []).concat([
       {
-        path: SIGN_IN_PATH,
+        path: options.initPath,
         method: "get",
         root: true,
         handler: passport.authenticate("oauth2"),
