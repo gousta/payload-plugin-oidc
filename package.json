@@ -19,10 +19,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "cd dev && yarn test",
+    "test": "cd dev && npm run test",
     "lint": "eslint src",
     "lint:fix": "eslint --fix --ext .ts,.tsx src",
-    "clean": "rimraf dist && rimraf dev/yarn.lock",
+    "clean": "rimraf dist && rimraf dev/package-lock.json",
     "postversion": "git push --follow-tags"
   },
   "peerDependencies": {
@@ -64,6 +64,7 @@
     "@types/express-session": "^1.17.9",
     "@types/jsonwebtoken": "^9.0.4",
     "connect-mongo": "^5.1.0",
+    "cross-env": "^7.0.3",
     "express-session": "^1.17.3"
   }
 }

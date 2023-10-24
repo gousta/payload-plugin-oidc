@@ -3,6 +3,7 @@ import path from "path";
 import Users from "./collections/Users";
 import Examples from "./collections/Examples";
 import { oidcPlugin } from "../../src/index";
+import axios from "axios";
 
 export default buildConfig({
   serverURL: "http://localhost:3000",
@@ -44,9 +45,9 @@ export default buildConfig({
       mongoUrl: process.env.DATABASE_URI,
       subField: { name: "email" },
       allowRegistration: true,
-      components: {
-        Button: SignInButton,
-      },
+      // components: {
+      //   Button: SignInButton,
+      // },
       async userinfo(accessToken) {
         const { data: user } = await axios.get(
           `${process.env.OIDC_URI}/oidc/me`,
