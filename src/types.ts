@@ -2,6 +2,12 @@ import type { StrategyOptions } from "passport-oauth2";
 import type { ComponentType } from "react";
 
 export interface oidcPluginOptions extends StrategyOptions {
+  /**
+   * Enable or disable plugin
+   * @default false
+   */
+  enabled?: boolean;
+
   /** How to connect to the Mongo database? */
   mongoUrl: string;
 
@@ -40,4 +46,9 @@ export interface oidcPluginOptions extends StrategyOptions {
     /** Defaults to "sub" */
     name?: string;
   };
+}
+
+export interface OIDCUser {
+  id: string | number;
+  email?: string;
 }
