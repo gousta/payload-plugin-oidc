@@ -13,6 +13,6 @@ export const onInitExtension = (
     // You can use the existing express app here to add middleware, routes, etc.
     // app.use(...)
   } catch (err: unknown) {
-    payload.logger(err);
+    console.error(err);
   }
 };
