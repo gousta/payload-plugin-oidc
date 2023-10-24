@@ -113,10 +113,6 @@ function oidcPluginServer(
 
   return {
     ...incoming,
-    admin: {
-      ...incoming.admin,
-      webpack: webpackOverride(incoming),
-    },
     endpoints: (incoming.endpoints || []).concat([
       {
         path: options.initPath,
