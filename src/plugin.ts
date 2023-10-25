@@ -11,7 +11,6 @@ import {
   fieldHasSubFields,
 } from "payload/dist/fields/config/types";
 import getCookieExpiration from "payload/dist/utilities/getCookieExpiration";
-import { onInitExtension } from "./onInitExtension";
 import type { oidcPluginOptions } from "./types";
 import { verify } from "./verify";
 import { extendWebpackConfig } from "./webpack";
@@ -66,14 +65,15 @@ export const oidcPlugin =
         path: callbackPath,
         method: "get",
         root: true,
-        handler: session({
-          resave: false,
-          saveUninitialized: false,
-          secret: process.env.PAYLOAD_SECRET!,
-          store: opts.mongoUrl
-            ? MongoStore.create({ mongoUrl: opts.mongoUrl })
-            : undefined,
-        }),
+        handler: session(),
+        // handler: session({
+        //   resave: false,
+        //   saveUninitialized: false,
+        //   secret: process.env.PAYLOAD_SECRET!,
+        //   store: opts.mongoUrl
+        //     ? MongoStore.create({ mongoUrl: opts.mongoUrl })
+        //     : undefined,
+        // }),
       },
       {
         path: callbackPath,
@@ -142,12 +142,6 @@ export const oidcPlugin =
         },
       },
     ];
-
-    config.onInit = async (payload) => {
-      if (incomingConfig.onInit) await incomingConfig.onInit(payload);
-      // Add additional onInit code by using the onInitExtension function
-      onInitExtension(opts, payload);
-    };
 
     passport.use(new OAuth2Strategy(opts, verify(opts, userCollectionSlug)));
     passport.serializeUser((user: any, done) => done(null, user.id));
