@@ -22,13 +22,17 @@
     "postversion": "git push --follow-tags"
   },
   "peerDependencies": {
+    "@types/passport-oauth2": "^1.4.14",
     "passport": "^0.6",
+    "passport-oauth2": "^1.7.0",
     "payload": "^2.0.13",
     "react": "^18"
   },
   "devDependencies": {
-    "@payloadcms/eslint-config": "^0.0.1",
+    "@types/express-session": "^1.17.9",
+    "@types/jsonwebtoken": "^9.0.4",
     "@types/passport-oauth2": "^1.4.14",
+    "@payloadcms/eslint-config": "^0.0.1",
     "@swc/jest": "^0.2.28",
     "dotenv": "^8.2.0",
     "eslint": "^8.19.0",
@@ -39,7 +43,10 @@
     "payload": "^2.0.13",
     "prettier": "^2.7.1",
     "react": "^18.0.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "connect-mongo": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "express-session": "^1.17.3"
   },
   "author": "Stratos Giouldasis <giouldasis.stratos@gmail.com>",
   "homepage": "https://github.com/gousta/payload-plugin-oidc",
@@ -49,12 +56,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/gousta/payload-plugin-oidc"
-  },
-  "dependencies": {
-    "@types/express-session": "^1.17.9",
-    "@types/jsonwebtoken": "^9.0.4",
-    "connect-mongo": "^5.1.0",
-    "cross-env": "^7.0.3",
-    "express-session": "^1.17.3"
   }
 }
