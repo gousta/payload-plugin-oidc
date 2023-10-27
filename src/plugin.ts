@@ -10,6 +10,7 @@ import type { oidcPluginOptions } from './types';
 import { verify } from './verify';
 import { SanitizedCollectionConfig } from 'payload/types';
 import SignInButton from './components/SignInButton/SignInButton';
+import { extendWebpackConfig } from './webpack';
 
 // Detect client side because some dependencies may be nullified
 const CLIENTSIDE = typeof session !== 'function';
@@ -26,10 +27,13 @@ export const oidcPlugin =
       (opts.callbackURL && new URL(opts.callbackURL).pathname) ||
       '/oidc/callback';
 
+    // If you need to add a webpack alias, use this function to extend the webpack config
+    const webpack = extendWebpackConfig(incomingConfig);
+
     config.admin = {
       ...(config.admin || {}),
-      // If you extended the webpack config, add it back in here
-      // If you did not extend the webpack config, you can remove this line
+
+      webpack,
       components: {
         ...(config.admin?.components || {}),
         beforeLogin: [
