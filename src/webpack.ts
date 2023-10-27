@@ -1,16 +1,16 @@
-import path from 'path';
+// import path from 'path';
 import type { Config } from 'payload/config';
 import type { Configuration as WebpackConfig } from 'webpack';
 
 export const extendWebpackConfig =
   (config: Config): ((webpackConfig: WebpackConfig) => WebpackConfig) =>
-  (webpackConfig) => {
+  (webpackConfig: any) => {
     const existingWebpackConfig =
       typeof config.admin?.webpack === 'function'
         ? config.admin.webpack(webpackConfig)
         : webpackConfig;
 
-    const mockModulePath = path.resolve(__dirname, './mocks/mockFile.js');
+    // const mockModulePath = path.resolve(__dirname, './mocks/mockFile.js');
 
     const newWebpack = {
       ...existingWebpackConfig,
@@ -18,7 +18,7 @@ export const extendWebpackConfig =
         ...(existingWebpackConfig.resolve || {}),
         alias: {
           ...(existingWebpackConfig.resolve?.alias ? existingWebpackConfig.resolve.alias : {}),
-          // Add additional aliases here like so:
+
           'express-session': false,
           'passport-oauth2': false,
           jsonwebtoken: false,
