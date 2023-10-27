@@ -52,7 +52,7 @@ const findUser = async (collection: any, searchKey: string, info: UserInfo) => {
       searchKey,
       info,
     });
-    throw new Error(e);
+    throw new Error(e as any);
   }
 };
 
