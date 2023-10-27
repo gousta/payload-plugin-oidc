@@ -1,11 +1,11 @@
 import { VerifyCallback } from 'passport-oauth2';
 import payload from 'payload';
-import { log } from '.';
 import { oidcPluginOptions, UserInfo, _strategy } from './types';
 
 export const verify = (options: oidcPluginOptions) =>
   async function (accessToken: string, refreshToken: string, profile: {}, cb: VerifyCallback) {
-    const { slug: collection = 'users' as any, searchKey = 'sub' as any } = options.userCollection;
+    const collection = options.userCollection?.slug ?? ('users' as any);
+    const searchKey = options.userCollection?.searchKey ?? ('sub' as any);
     const registerUserIfNotFound = options.registerUserIfNotFound || false;
 
     try {
@@ -15,22 +15,17 @@ export const verify = (options: oidcPluginOptions) =>
       const user = await findUser(collection, searchKey, info);
 
       if (user) {
-        log('user exists', { user });
         await updateUser(collection, searchKey, info);
         const updatedUser = await findUser(collection, searchKey, info);
 
         return cb(null, { ...updatedUser, collection, _strategy });
       }
 
-      log('user does not exist', { registerUserIfNotFound });
-
       if (registerUserIfNotFound) {
         const newUser = await createUser(collection, info);
-        log('created user', { newUser });
 
         return cb(null, { ...newUser, collection, _strategy });
       } else {
-        log('should not create user');
         return cb(new Error('USER DOES NOT EXIST'));
       }
     } catch (error: any) {
@@ -40,7 +35,7 @@ export const verify = (options: oidcPluginOptions) =>
   };
 
 const findUser = async (collection: any, searchKey: string, info: UserInfo) => {
-  const where = { [searchKey]: { equals: info[searchKey] as 'sub' } };
+  const where = { [searchKey]: { equals: info[searchKey as 'sub'] } };
   try {
     const users = await payload.find({
       collection,
@@ -64,7 +59,7 @@ const findUser = async (collection: any, searchKey: string, info: UserInfo) => {
 const updateUser = async (collection: any, searchKey: string, info: UserInfo) => {
   return await payload.update({
     collection,
-    where: { [searchKey]: { equals: info[searchKey] } },
+    where: { [searchKey]: { equals: info[searchKey as 'sub'] } },
     data: { ...info },
   });
 };
