@@ -19,7 +19,6 @@ export const extendWebpackConfig =
           ...(existingWebpackConfig.resolve?.alias ? existingWebpackConfig.resolve.alias : {}),
           // Add additional aliases here like so:
           // [path.resolve(__dirname, "./package")]: mockModulePath,
-          'express-session': false,
           'passport-oauth2': false,
           jsonwebtoken: false,
           passport: false,
