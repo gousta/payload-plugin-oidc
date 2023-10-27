@@ -1,6 +1,5 @@
 import Button from 'payload/dist/admin/components/elements/Button';
 import React from 'react';
-import './index.scss';
 
 export default function SignInButton() {
   return (
