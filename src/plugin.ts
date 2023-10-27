@@ -9,8 +9,8 @@ import getCookieExpiration from 'payload/dist/utilities/getCookieExpiration';
 import type { oidcPluginOptions } from './types';
 import { verify } from './verify';
 import { extendWebpackConfig } from './webpack';
-import SignInButton from './components/SignInButton/SignInButton';
 import { SanitizedCollectionConfig } from 'payload/types';
+import SignInButton from './components/SignInButton/SignInButton';
 
 // Detect client side because some dependencies may be nullified
 const CLIENTSIDE = typeof session !== 'function';
@@ -83,7 +83,6 @@ export const oidcPlugin =
         method: 'get',
         root: true,
         async handler(req, res) {
-          console.log('reached here');
           // Get the Mongoose user
           const collectionConfig = payload.collections[userCollectionSlug].config;
 
