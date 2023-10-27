@@ -1,93 +1,88 @@
-import { VerifyCallback } from "passport-oauth2";
-import payload from "payload";
-import { PaginatedDocs } from "payload/dist/database/types";
-import { oidcPluginOptions, OIDCUser } from "./types";
+import { VerifyCallback } from 'passport-oauth2';
+import payload from 'payload';
+import { log } from '.';
+import { oidcPluginOptions, UserInfo, _strategy } from './types';
 
-export const verify = (
-  options: oidcPluginOptions,
-  userCollectionSlug: string
-) =>
-  async function (
-    accessToken: string,
-    refreshToken: string,
-    profile: {},
-    cb: VerifyCallback
-  ) {
-    const allowRegistration = options.allowRegistration || false;
-    const searchKey = options.subField?.name || "sub";
-    let info: {
-      sub: string;
-      name?: string;
-      email?: string;
-      password?: string;
-      role?: string;
-    };
-    let user: OIDCUser & { collection?: any; _strategy?: any };
-    let users: PaginatedDocs<OIDCUser>;
+export const verify = (options: oidcPluginOptions) =>
+  async function (accessToken: string, refreshToken: string, profile: {}, cb: VerifyCallback) {
+    const { slug: collection = 'users' as any, searchKey = 'sub' as any } = options.userCollection;
+    const registerUserIfNotFound = options.registerUserIfNotFound || false;
 
     try {
-      // Get the userinfo
-      info = await options.userinfo?.(accessToken);
-      if (!info) throw new Error("Failed to get userinfo");
+      const info = await options.userinfo?.(accessToken);
+      if (!info) cb(new Error('FAILED TO GET USERINFO'));
 
-      // Match existing user
-      users = await payload.find({
-        collection: userCollectionSlug,
-        where: { [searchKey]: { equals: info[searchKey as "sub"] } },
-        showHiddenFields: true,
-      });
+      const user = await findUser(collection, searchKey, info);
 
-      if (users.docs && users.docs.length) {
-        user = users.docs[0];
+      if (user) {
+        log('user exists', { user });
+        await updateUser(collection, searchKey, info);
+        const updatedUser = await findUser(collection, searchKey, info);
 
-        await payload.update({
-          collection: userCollectionSlug,
-          where: { [searchKey]: { equals: info[searchKey as "sub"] } },
-          data: {
-            sub: info.sub,
-            role: info.role,
-          },
-        });
+        return cb(null, { ...updatedUser, collection, _strategy });
+      }
 
-        users = await payload.find({
-          collection: userCollectionSlug,
-          where: { [searchKey]: { equals: info[searchKey as "sub"] } },
-          showHiddenFields: true,
-        });
-        user = users.docs[0];
-        user.collection = userCollectionSlug;
-        user._strategy = "oauth2";
+      log('user does not exist', { registerUserIfNotFound });
 
-        cb(null, user);
+      if (registerUserIfNotFound) {
+        const newUser = await createUser(collection, info);
+        log('created user', { newUser });
+
+        return cb(null, { ...newUser, collection, _strategy });
       } else {
-        if (allowRegistration) {
-          // Register new user
-          user = await payload.create({
-            collection: userCollectionSlug,
-            data: {
-              ...info,
-              // Stuff breaks when password is missing
-              password: info.password || makeid(20),
-            },
-            showHiddenFields: true,
-          });
-          user.collection = userCollectionSlug;
-          user._strategy = "oauth2";
-
-          cb(null, user);
-        } else {
-          cb(new Error("Account does not exist"));
-        }
+        log('should not create user');
+        return cb(new Error('USER DOES NOT EXIST'));
       }
     } catch (error: any) {
-      cb(error);
+      console.error('VERIFICATION FAILED', error);
+      return cb(error);
     }
   };
 
-function makeid(length: number) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const findUser = async (collection: any, searchKey: string, info: UserInfo) => {
+  const where = { [searchKey]: { equals: info[searchKey] as 'sub' } };
+  try {
+    const users = await payload.find({
+      collection,
+      where,
+    });
+
+    if (!users.docs || !users.docs[0]) return null;
+
+    return users.docs && users.docs[0];
+  } catch (e) {
+    console.error('findUserBySearchKey has caused an error:', {
+      e,
+      collection,
+      searchKey,
+      info,
+    });
+    throw new Error(e);
+  }
+};
+
+const updateUser = async (collection: any, searchKey: string, info: UserInfo) => {
+  return await payload.update({
+    collection,
+    where: { [searchKey]: { equals: info[searchKey] } },
+    data: { ...info },
+  });
+};
+
+const createUser = async (collection: any, info: UserInfo) => {
+  return await payload.create({
+    collection,
+    data: {
+      ...info,
+      // Stuff breaks when password is missing
+      password: info?.password || makeid(20),
+    },
+  });
+};
+
+const makeid = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   let counter = 0;
   while (counter < length) {
@@ -95,4 +90,4 @@ function makeid(length: number) {
     counter += 1;
   }
   return result;
-}
+};

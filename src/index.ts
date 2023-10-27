@@ -1,2 +1,2 @@
-export { oidcPlugin } from "./plugin";
-export type { oidcPluginOptions } from "./types";
+export { oidcPlugin } from './plugin';
+export type { oidcPluginOptions } from './types';

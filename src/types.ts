@@ -1,5 +1,7 @@
-import type { StrategyOptions } from "passport-oauth2";
-import type { ComponentType } from "react";
+import type { StrategyOptions } from 'passport-oauth2';
+import type { ComponentType } from 'react';
+
+export const _strategy = 'oauth2';
 
 export interface oidcPluginOptions extends StrategyOptions {
   /**
@@ -12,7 +14,7 @@ export interface oidcPluginOptions extends StrategyOptions {
   mongoUrl: string;
 
   /** Register user after successful authentication (when user not found) - Defaults to false */
-  allowRegistration: boolean;
+  registerUserIfNotFound: boolean;
 
   /** Map an authentication result to a user */
   userinfo: (accessToken: string) => Promise<{
@@ -39,16 +41,20 @@ export interface oidcPluginOptions extends StrategyOptions {
   userCollection?: {
     /** Defaults to "users" */
     slug?: string;
-  };
-
-  /** If the collection does not have a field with name "sub", it will be created */
-  subField?: {
     /** Defaults to "sub" */
-    name?: string;
+    searchKey?: string;
   };
 }
 
 export interface OIDCUser {
   id: string | number;
   email?: string;
+}
+
+export interface UserInfo {
+  sub: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  role?: string;
 }
