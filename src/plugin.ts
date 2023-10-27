@@ -8,7 +8,6 @@ import { Field, fieldAffectsData, fieldHasSubFields } from 'payload/dist/fields/
 import getCookieExpiration from 'payload/dist/utilities/getCookieExpiration';
 import type { oidcPluginOptions } from './types';
 import { verify } from './verify';
-import { extendWebpackConfig } from './webpack';
 import { SanitizedCollectionConfig } from 'payload/types';
 import SignInButton from './components/SignInButton/SignInButton';
 
@@ -27,14 +26,10 @@ export const oidcPlugin =
       (opts.callbackURL && new URL(opts.callbackURL).pathname) ||
       '/oidc/callback';
 
-    // If you need to add a webpack alias, use this function to extend the webpack config
-    const webpack = extendWebpackConfig(incomingConfig);
-
     config.admin = {
       ...(config.admin || {}),
       // If you extended the webpack config, add it back in here
       // If you did not extend the webpack config, you can remove this line
-      webpack,
       components: {
         ...(config.admin?.components || {}),
         beforeLogin: [

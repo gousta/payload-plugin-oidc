@@ -27,9 +27,14 @@
     "react": "^18"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.4",
     "@types/passport-oauth2": "^1.4.14",
+    "@bothrs/util": "^3",
+    "connect-mongo": "^4",
+    "debug": "^4",
     "express-session": "^1.17.3",
-    "passport-oauth2": "^1.7.0"
+    "passport-oauth2": "^1.7.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@payloadcms/eslint-config": "^0.0.1",
