@@ -24,6 +24,7 @@
   "peerDependencies": {
     "@types/passport-oauth2": "^1.4.14",
     "passport": "^0.6",
+    "express-session": "^1.17.3",
     "passport-oauth2": "^1.7.0",
     "payload": "^2.0.13",
     "react": "^18"
