@@ -12,7 +12,6 @@ import { extendWebpackConfig } from './lib/webpack';
 
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
-const MongoDBSession = MongoDBStore(session);
 
 export const oidcPlugin =
   (opts: oidcPluginOptions) =>
@@ -37,8 +36,8 @@ export const oidcPlugin =
     // The order of this check is important, we still want any webpack extensions to be applied even if the plugin is disabled
     if (opts.enabled === false) return config;
 
+    const MongoDBSession = MongoDBStore(session);
     const userCollectionSlug = (opts.userCollection?.slug as 'users') || 'users';
-
     const callbackPath = getCallbackPath(opts);
 
     config.endpoints = [
