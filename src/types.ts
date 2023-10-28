@@ -14,7 +14,7 @@ export interface oidcPluginOptions extends StrategyOptions {
   mongoUrl: string;
 
   /** Register user after successful authentication (when user not found) - Defaults to false */
-  registerUserIfNotFound: boolean;
+  createUserIfNotFound: boolean;
 
   /** Map an authentication result to a user */
   userinfo: (accessToken: string) => Promise<{
