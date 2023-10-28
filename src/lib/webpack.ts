@@ -19,6 +19,7 @@ export const extendWebpackConfig =
         alias: {
           ...(existingWebpackConfig.resolve?.alias ? existingWebpackConfig.resolve.alias : {}),
 
+          'connect-mongodb-session': false,
           'express-session': false,
           'passport-oauth2': false,
           jsonwebtoken: false,
