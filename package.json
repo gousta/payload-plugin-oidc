@@ -1,6 +1,6 @@
 {
   "name": "payload-plugin-oidc",
-  "version": "1.31.0",
+  "version": "1.32.0",
   "description": "OIDC plugin for Payload 2.0",
   "license": "MIT",
   "main": "dist/index.js",
