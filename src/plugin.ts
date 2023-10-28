@@ -1,4 +1,4 @@
-import MongoStore from 'connect-mongo';
+import MongoDBStore from 'connect-mongodb-session';
 import session from 'express-session';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
@@ -12,6 +12,7 @@ import { extendWebpackConfig } from './lib/webpack';
 
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
+const MongoDBSession = MongoDBStore(session);
 
 export const oidcPlugin =
   (opts: oidcPluginOptions) =>
@@ -56,7 +57,7 @@ export const oidcPlugin =
           resave: false,
           saveUninitialized: false,
           secret: process.env.PAYLOAD_SECRET || 'unsafe',
-          store: MongoStore.create({ mongoUrl: opts.mongoUrl }),
+          store: new MongoDBSession({ uri: opts.mongoUrl, collection: 'oidc_sessions' }),
         }),
       },
       {

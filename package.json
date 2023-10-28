@@ -29,7 +29,7 @@
   "dependencies": {
     "@types/express-session": "^1.17.9",
     "@types/passport-oauth2": "^1.4.14",
-    "connect-mongo": "^5.1.0",
+    "connect-mongodb-session": "^3.1.1",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
     "passport-oauth2": "^1.7.0"
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@payloadcms/eslint-config": "^0.0.1",
     "@swc/jest": "^0.2.28",
+    "@types/connect-mongodb-session": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.4",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
