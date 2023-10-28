@@ -61,7 +61,11 @@ export default buildConfig({
           sub: user.sub,
           name: user.name,
           email: user.email,
-          role: 'admin',
+          // You can use OIDC user custom data to get the role for this app
+          role: user.custom_data?.my_app_role,
+
+          // or you can do something like this
+          // role: user.custom_data?.role ? 'admin' : 'editor',
         };
       },
     }),
