@@ -1,3 +1,4 @@
+import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
@@ -55,6 +56,7 @@ export const oidcPlugin =
           resave: false,
           saveUninitialized: false,
           secret: process.env.PAYLOAD_SECRET || 'unsafe',
+          store: MongoStore.create({ mongoUrl: opts.mongoUrl }),
         }),
       },
       {
