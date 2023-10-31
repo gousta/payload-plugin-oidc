@@ -40,10 +40,6 @@ export const oidcPlugin =
     const callbackPath = getCallbackPath(opts);
     const store = MongoStore.create({ mongoUrl: opts.mongoUrl, collectionName: 'oidc_sessions' });
 
-    setTimeout(() => {
-      store.close(); // Allows yarn build to work on payload 2.0.0
-    }, 2000);
-
     config.endpoints = [
       ...(config.endpoints || []),
       {
