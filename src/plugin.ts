@@ -1,4 +1,4 @@
-import MongoDBStore from 'connect-mongodb-session';
+import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
@@ -36,9 +36,13 @@ export const oidcPlugin =
     // The order of this check is important, we still want any webpack extensions to be applied even if the plugin is disabled
     if (opts.enabled === false) return config;
 
-    const MongoDBSession = MongoDBStore(session);
     const userCollectionSlug = (opts.userCollection?.slug as 'users') || 'users';
     const callbackPath = getCallbackPath(opts);
+    const store = MongoStore.create({ mongoUrl: opts.mongoUrl, collectionName: 'oidc_sessions' });
+
+    setTimeout(() => {
+      store.close(); // Allows yarn build to work on payload 2.0.0
+    }, 2000);
 
     config.endpoints = [
       ...(config.endpoints || []),
@@ -56,7 +60,7 @@ export const oidcPlugin =
           resave: false,
           saveUninitialized: false,
           secret: process.env.PAYLOAD_SECRET || 'unsafe',
-          store: new MongoDBSession({ uri: opts.mongoUrl, collection: 'oidc_sessions' }),
+          store,
         }),
       },
       {
