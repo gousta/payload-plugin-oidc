@@ -1,4 +1,4 @@
-import MongoStore from 'connect-mongo';
+// import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
@@ -38,7 +38,7 @@ export const oidcPlugin =
 
     const userCollectionSlug = (opts.userCollection?.slug as 'users') || 'users';
     const callbackPath = getCallbackPath(opts);
-    const store = MongoStore.create({ mongoUrl: opts.mongoUrl, collectionName: 'oidc_sessions' });
+    // const store = MongoStore.create({ mongoUrl: opts.mongoUrl, collectionName: 'oidc_sessions' });
 
     config.endpoints = [
       ...(config.endpoints || []),
@@ -48,17 +48,17 @@ export const oidcPlugin =
         root: true,
         handler: passport.authenticate('oauth2'),
       },
-      {
-        path: callbackPath,
-        method: 'get',
-        root: true,
-        handler: session({
-          resave: false,
-          saveUninitialized: false,
-          secret: process.env.PAYLOAD_SECRET || 'unsafe',
-          store,
-        }),
-      },
+      // {
+      //   path: callbackPath,
+      //   method: 'get',
+      //   root: true,
+      //   handler: session({
+      //     resave: false,
+      //     saveUninitialized: false,
+      //     secret: process.env.PAYLOAD_SECRET || 'unsafe',
+      //     store,
+      //   }),
+      // },
       {
         path: callbackPath,
         method: 'get',
