@@ -18,6 +18,7 @@ export const extendWebpackConfig =
 
           'express-session': false,
           'passport-oauth2': false,
+          memorystore: false,
           jsonwebtoken: false,
           passport: false,
         },
