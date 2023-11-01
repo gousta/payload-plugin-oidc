@@ -9,7 +9,9 @@ import type { oidcPluginOptions } from './types';
 import { verify } from './lib/oauth/verify';
 import { extendWebpackConfig } from './lib/webpack';
 import { getCallbackPath } from './lib/helpers';
-const MemoryStore = require('memorystore')(session);
+import createMemoryStore from 'memorystore';
+
+const MemoryStore = createMemoryStore(session);
 
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
