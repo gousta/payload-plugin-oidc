@@ -9,6 +9,7 @@ import type { oidcPluginOptions } from './types';
 import { verify } from './lib/oauth/verify';
 import { extendWebpackConfig } from './lib/webpack';
 import { getCallbackPath } from './lib/helpers';
+const MemoryStore = require('memorystore')(session);
 
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
@@ -52,7 +53,9 @@ export const oidcPlugin =
           resave: false,
           saveUninitialized: false,
           secret: process.env.PAYLOAD_SECRET || 'unsafe',
-          cookie: { secure: true },
+          store: new MemoryStore({
+            checkPeriod: 86400000, // prune expired entries every 24h
+          }),
         }),
       },
       {
