@@ -11,8 +11,6 @@ import { extendWebpackConfig } from './lib/webpack';
 import { getCallbackPath } from './lib/helpers';
 import createMemoryStore from 'memorystore';
 
-const MemoryStore = createMemoryStore(session);
-
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
 
@@ -38,6 +36,7 @@ export const oidcPlugin =
 
     const userCollectionSlug = (opts.userCollection?.slug as 'users') || 'users';
     const callbackPath = getCallbackPath(opts);
+    const MemoryStore = createMemoryStore(session);
 
     config.endpoints = [
       ...(config.endpoints || []),
