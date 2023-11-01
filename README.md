@@ -35,7 +35,6 @@ export default buildConfig({
   collections: [Users],
   plugins: [
     oidcPlugin({
-      enabled: true,
       clientID: process.env.OIDC_CLIENT_ID,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       authorizationURL: `${process.env.OIDC_URI}/oidc/auth`,

@@ -4,12 +4,6 @@ import type { ComponentType } from 'react';
 export const _strategy = 'oauth2';
 
 export interface oidcPluginOptions extends StrategyOptions {
-  /**
-   * Enable or disable plugin
-   * @default false
-   */
-  enabled?: boolean;
-
   /** How to connect to the Mongo database? */
   mongoUrl: string;
 

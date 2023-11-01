@@ -1,4 +1,3 @@
-import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
@@ -9,6 +8,7 @@ import { loginHandler } from './lib/login';
 import type { oidcPluginOptions } from './types';
 import { verify } from './lib/oauth/verify';
 import { extendWebpackConfig } from './lib/webpack';
+import { getCallbackPath } from './lib/helpers';
 
 // Detect client side because some dependencies may be nullified
 const isUI = typeof session !== 'function';
@@ -32,13 +32,9 @@ export const oidcPlugin =
     };
 
     if (isUI) return config;
-    // If the plugin is disabled, return the config without modifying it
-    // The order of this check is important, we still want any webpack extensions to be applied even if the plugin is disabled
-    if (opts.enabled === false) return config;
 
     const userCollectionSlug = (opts.userCollection?.slug as 'users') || 'users';
     const callbackPath = getCallbackPath(opts);
-    const store = MongoStore.create({ mongoUrl: opts.mongoUrl, collectionName: 'oidc_sessions' });
 
     config.endpoints = [
       ...(config.endpoints || []),
@@ -56,7 +52,7 @@ export const oidcPlugin =
           resave: false,
           saveUninitialized: false,
           secret: process.env.PAYLOAD_SECRET || 'unsafe',
-          store,
+          cookie: { secure: true },
         }),
       },
       {
@@ -85,11 +81,3 @@ export const oidcPlugin =
 
     return config;
   };
-
-const getCallbackPath = (opts: oidcPluginOptions) => {
-  return (
-    opts.callbackPath ||
-    (opts.callbackURL && new URL(opts.callbackURL).pathname) ||
-    '/oidc/callback'
-  );
-};

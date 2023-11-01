@@ -1,4 +1,3 @@
-// import path from 'path';
 import type { Config } from 'payload/config';
 import type { Configuration as WebpackConfig } from 'webpack';
 
@@ -10,8 +9,6 @@ export const extendWebpackConfig =
         ? config.admin.webpack(webpackConfig)
         : webpackConfig;
 
-    // const mockModulePath = path.resolve(__dirname, './mocks/mockFile.js');
-
     const newWebpack = {
       ...existingWebpackConfig,
       resolve: {
@@ -19,7 +16,6 @@ export const extendWebpackConfig =
         alias: {
           ...(existingWebpackConfig.resolve?.alias ? existingWebpackConfig.resolve.alias : {}),
 
-          'connect-mongo': false,
           'express-session': false,
           'passport-oauth2': false,
           jsonwebtoken: false,
