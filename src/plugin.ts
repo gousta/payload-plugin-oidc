@@ -18,6 +18,12 @@ export const oidcPlugin =
   (opts: oidcPluginOptions) =>
   (incomingConfig: Config): Config => {
     let config = { ...incomingConfig };
+    const buttonComponentPosition = opts.components?.position ?? "beforeLogin";
+    let componentConfigs = config.admin?.components?.beforeLogin || [];
+
+    if(buttonComponentPosition == "afterLogin"){
+      componentConfigs = config.admin?.components?.afterLogin || [];
+    }
 
     config.admin = {
       ...(config.admin || {}),
@@ -25,11 +31,11 @@ export const oidcPlugin =
       webpack: extendWebpackConfig(incomingConfig),
       components: {
         ...(config.admin?.components || {}),
-        beforeLogin: [
-          ...(config.admin?.components?.beforeLogin || []),
-          opts.components?.Button ?? SignInButton,
-        ],
-      },
+        [buttonComponentPosition]: [
+          ...(componentConfigs || []),
+          opts.components?.Button ?? SignInButton
+        ]
+      }
     };
 
     if (isUI) return config;
