@@ -44,6 +44,10 @@ export default buildConfig({
       callbackURL: `${process.env.SELF_URL}/oidc/callback`,
       scope: 'openid offline_access profile email custom_data',
       mongoUrl: process.env.DATABASE_URI,
+      components: {
+        Button: SignInButton, //can be your own custom component
+        position: "beforeLogin" //beforeLogin | afterLogin
+      },
       userCollection: {
         slug: Users.slug,
         searchKey: 'email',
