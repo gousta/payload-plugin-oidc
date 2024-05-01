@@ -6,7 +6,8 @@ import getCookieExpiration from 'payload/dist/utilities/getCookieExpiration';
 import { PayloadRequest, SanitizedCollectionConfig } from 'payload/types';
 
 export const loginHandler =
-  (userCollectionSlug: string) => async (req: PayloadRequest, res: Response) => {
+  (userCollectionSlug: string, redirectPathAfterLogin: string) =>
+  async (req: PayloadRequest, res: Response) => {
     // Get the Mongoose user
     const collectionConfig = payload.collections[userCollectionSlug].config;
 
@@ -33,7 +34,7 @@ export const loginHandler =
     });
 
     // Redirect to admin dashboard
-    return res.redirect('/admin');
+    return res.redirect(redirectPathAfterLogin);
   };
 
 const getFieldsToSign = (collectionConfig: SanitizedCollectionConfig, user: any) => {

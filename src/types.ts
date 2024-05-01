@@ -28,6 +28,9 @@ export interface oidcPluginOptions extends StrategyOptions {
   /** Which path to mount for the callback endpoint in express, defaults to the path in callbackURL */
   callbackPath?: string;
 
+  /** Path to redirect to after login, defaults to `/admin` */
+  redirectPathAfterLogin?: string;
+
   /** Override button component */
   components?: {
     Button?: ComponentType<any>;

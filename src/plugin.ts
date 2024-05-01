@@ -18,10 +18,10 @@ export const oidcPlugin =
   (opts: oidcPluginOptions) =>
   (incomingConfig: Config): Config => {
     let config = { ...incomingConfig };
-    const buttonComponentPosition = opts.components?.position ?? "beforeLogin";
+    const buttonComponentPosition = opts.components?.position ?? 'beforeLogin';
     let componentConfigs = config.admin?.components?.beforeLogin || [];
 
-    if(buttonComponentPosition == "afterLogin"){
+    if (buttonComponentPosition == 'afterLogin') {
       componentConfigs = config.admin?.components?.afterLogin || [];
     }
 
@@ -33,9 +33,9 @@ export const oidcPlugin =
         ...(config.admin?.components || {}),
         [buttonComponentPosition]: [
           ...(componentConfigs || []),
-          opts.components?.Button ?? SignInButton
-        ]
-      }
+          opts.components?.Button ?? SignInButton,
+        ],
+      },
     };
 
     if (isUI) return config;
@@ -75,7 +75,7 @@ export const oidcPlugin =
         path: callbackPath,
         method: 'get',
         root: true,
-        handler: loginHandler(userCollectionSlug),
+        handler: loginHandler(userCollectionSlug, opts.redirectPathAfterLogin || '/admin'),
       },
     ];
 
