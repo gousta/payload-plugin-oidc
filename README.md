@@ -37,7 +37,6 @@ export default buildConfig({
       callbackPath: `/oidc/callback`,
       callbackURL: `${process.env.SELF_URL}/oidc/callback`,
       scope: 'openid offline_access profile email custom_data',
-      mongoUrl: process.env.DATABASE_URI,
       components: {
         Button: SignInButton, //can be your own custom component
         position: "beforeLogin" //beforeLogin | afterLogin
@@ -46,7 +45,7 @@ export default buildConfig({
         slug: Users.slug,
         searchKey: 'email',
       },
-      registerUserIfNotFound: true,
+      createUserIfNotFound: true,
       async userinfo(accessToken) {
         const { data: user } = await axios.get(`${process.env.OIDC_URI}/oidc/me`, {
           headers: {
@@ -83,5 +82,3 @@ To get it running:
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
-
-[link-contributors]: ../../contributors
